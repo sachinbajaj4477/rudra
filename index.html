@@ -105,10 +105,7 @@
             width: 280px; max-width: 60%; height: auto;
             opacity: 0; transform: scale(0.5); 
             filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
-            
-            /* REDUCED GAP HERE */
             margin-bottom: 0px; 
-            
             animation: zoomLogo 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards, floatLogo 6s ease-in-out infinite 2s;
             animation-delay: 0.5s, 2.5s; 
         }
@@ -117,24 +114,18 @@
 
         /* COMING SOON - FANCY FONT & BIGGER */
         .hero h3 { 
-            /* Font Update */
             font-family: 'Playfair Display', serif; 
             font-style: italic; 
-            font-size: 38px; /* Bigger Size */
+            font-size: 38px; 
             letter-spacing: 5px; 
-            
-            /* Tighter Spacing */
             margin-top: 5px; 
             margin-bottom: 5px;
-            
             text-align: center;
-            
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200% auto;
             animation: shine 5s linear infinite, fadeIn 2s ease 1.5s forwards;
-            
             opacity: 0; 
         }
         @keyframes fadeIn { to { opacity: 1; } }
@@ -143,13 +134,12 @@
         .decode-text {
             font-size: 14px; 
             font-weight: 300;
-            margin-top: 5px; /* Closer to title */
+            margin-top: 5px; 
             color: #aaa; 
             letter-spacing: 4px;
             min-height: 24px; 
             white-space: nowrap;
             text-align: center;
-            
             clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-20px);
             animation: revealLeftRight 2.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             animation-delay: 1.2s;
@@ -391,7 +381,8 @@
             
             const formData = new FormData(form);
             
-            fetch("https://formsubmit.co/ajax/dagaradhika29@gmail.com", {
+            // UPDATED: Secure Fetch URL (No Email Exposed)
+            fetch("https://formsubmit.co/ajax/39b529ca2c3ff78dea576e6806d61eb3", {
                 method: "POST",
                 body: formData
             })
