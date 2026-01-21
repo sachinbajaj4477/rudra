@@ -10,57 +10,38 @@
     <style>
         /* --- LUXURY VARIABLES --- */
         :root {
-            /* THE EXACT COLOR FROM YOUR IMAGE */
-            --bg-royal: #2b0404; 
-            
-            --gold: #d4af37; 
+            --primary: #2b0404; /* UPDATED: Deep Royal Maroon */
+            --gold: #d4af37;
             --text: #ffffff;
+            --bg-dark: #050505;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        /* Removed 'cursor: none' so the normal arrow shows */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Lato', sans-serif;
-            background-color: var(--bg-royal); /* Applied globally */
+            background-color: var(--primary); /* Global Background */
             color: var(--text);
             overflow-x: hidden;
         }
 
         h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; letter-spacing: 1px; }
 
-        /* --- 0. NOISE OVERLAY --- */
-        .noise-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.05; pointer-events: none; z-index: 9990;
-        }
+        /* NOISE OVERLAY */
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.05; pointer-events: none; z-index: 9990; }
+        
+        /* --- CUSTOM CURSOR CSS REMOVED HERE --- */
 
-        /* --- 1. MOUSE CURSOR --- */
-        #cursor-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s; }
-        #cursor-glow { width: 400px; height: 400px; background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(0,0,0,0) 70%); position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: top 0.1s ease, left 0.1s ease; }
-
-        /* --- 2. PRELOADER --- */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-royal); /* Matches background */
-            z-index: 10001;
-            display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
-        }
+        /* PRELOADER */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10001; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
         .loader-img { width: 150px; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.3; transform: scale(0.95); } }
 
-        /* --- 3. SCROLL REVEALS --- */
-        .reveal { opacity: 0; transform: translateY(50px); transition: all 1.2s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .gold-divider { height: 2px; width: 0px; background: var(--gold); margin: 20px auto; transition: width 1.5s ease; }
-        .reveal.active .gold-divider { width: 100px; }
-
-        /* --- HERO SECTION --- */
+        /* HERO SECTION */
         .hero {
             height: 100vh;
-            /* Solid Royal Maroon Background */
-            background: var(--bg-royal); 
+            background: var(--primary);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; border-bottom: 4px solid var(--gold);
             position: relative; overflow: hidden;
@@ -75,143 +56,90 @@
         /* LOGO ANIMATION: INSIDE TO OUT */
         .hero-logo {
             width: 280px; max-width: 70%; height: auto;
-            opacity: 0; 
-            transform: scale(0.5); 
+            opacity: 0; transform: scale(0.5); 
             filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
             margin-bottom: 0px;
             animation: zoomLogo 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
             animation-delay: 0.5s;
         }
+        @keyframes zoomLogo { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
 
-        @keyframes zoomLogo {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .hero h3 {
-            font-size: 24px; color: white; letter-spacing: 8px; margin-top: 25px;
-            opacity: 0; animation: fadeIn 2s ease 1.5s forwards;
-        }
+        .hero h3 { font-size: 24px; color: white; letter-spacing: 8px; margin-top: 25px; opacity: 0; animation: fadeIn 2s ease 1.5s forwards; }
         @keyframes fadeIn { to { opacity: 1; } }
 
         /* TEXT REVEAL: LEFT TO RIGHT */
         .decode-text {
             font-size: 16px; font-style: italic; margin-top: 20px; color: #aaa; letter-spacing: 3px;
             min-height: 24px; white-space: nowrap;
-            clip-path: inset(0 100% 0 0); 
-            opacity: 0; transform: translateX(-20px);
+            clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-20px);
             animation: revealLeftRight 2.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             animation-delay: 1.2s;
         }
-        @keyframes revealLeftRight {
-            0% { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-20px); }
-            100% { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); }
-        }
+        @keyframes revealLeftRight { 0% { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-20px); } 100% { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); } }
 
-        /* --- SECTIONS (Unified Background) --- */
-        .section { 
-            padding: 100px 10%; 
-            background: var(--bg-royal); /* Same Maroon */
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1); /* Subtle Gold Line */
-        }
+        /* SECTIONS */
+        .section { padding: 100px 10%; background: var(--primary); border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
         .section-header { text-align: center; margin-bottom: 60px; }
         .section-title { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
         
         .founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .founder-img-box { text-align: center; perspective: 1000px; }
-        .founder-img { 
-            width: 100%; max-width: 450px; height: 550px; 
-            object-fit: cover; object-position: top; 
-            border-radius: 4px; border: 2px solid var(--gold); 
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); 
-            opacity: 0.95; transition: all 0.6s ease;
-        }
-        .founder-img:hover { transform: scale(1.02) rotateY(5deg); box-shadow: 20px 20px 50px rgba(212, 175, 55, 0.2); }
-
+        .founder-img { width: 100%; max-width: 450px; height: 550px; object-fit: cover; border-radius: 4px; border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); opacity: 0.95; transition: all 0.6s ease; }
+        .founder-img:hover { transform: scale(1.02) rotateY(5deg); }
         .founder-info h2 { font-size: 45px; color: white; margin-bottom: 5px; }
         .founder-info h4 { color: var(--gold); letter-spacing: 3px; font-size: 14px; margin-bottom: 20px; text-transform: uppercase; }
-        .founder-title {
-            color: var(--gold); font-size: 16px; letter-spacing: 2px; 
-            margin-bottom: 25px; text-transform: uppercase; font-weight: bold;
-            display: inline-block; border-bottom: 1px solid var(--gold); padding-bottom: 5px;
-        }
+        .founder-title { color: var(--gold); font-size: 16px; letter-spacing: 2px; margin-bottom: 25px; font-weight: bold; display: inline-block; border-bottom: 1px solid var(--gold); padding-bottom: 5px; }
         .founder-info p { font-size: 16px; color: #ccc; line-height: 1.8; margin-bottom: 20px; }
 
         .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; perspective: 1000px; }
-        .tech-card { 
-            /* Card background slightly darker maroon for contrast */
-            background: linear-gradient(145deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5)); 
-            padding: 40px; 
-            border: 1px solid rgba(212, 175, 55, 0.2); 
-            position: relative; overflow: hidden;
-            transform-style: preserve-3d; transition: transform 0.1s ease;
-        }
-        .tech-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 200%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-            transform: skewX(-20deg); transition: 0.5s; opacity: 0; pointer-events: none;
-        }
-        .tech-card:hover::before { left: 100%; opacity: 1; transition: 0.7s; }
-        .tech-card h3 { color: white; margin-bottom: 15px; font-size: 22px; transform: translateZ(20px); }
-        .tech-card p { color: #ccc; font-size: 15px; line-height: 1.6; transform: translateZ(20px); }
-        .tech-icon { font-size: 30px; color: var(--gold); margin-bottom: 20px; transition: 0.4s; transform: translateZ(30px); }
-        .tech-card:hover .tech-icon { text-shadow: 0 0 15px var(--gold); }
+        .tech-card { background: linear-gradient(145deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5)); padding: 40px; border: 1px solid rgba(212, 175, 55, 0.2); transition: transform 0.1s ease; }
+        .tech-card:hover { border-color: var(--gold); }
+        .tech-card h3 { color: white; margin-bottom: 15px; font-size: 22px; }
+        .tech-card p { color: #ccc; font-size: 15px; line-height: 1.6; }
+        .tech-icon { font-size: 30px; color: var(--gold); margin-bottom: 20px; }
 
-        .newsletter { background: var(--bg-royal); padding: 80px 20px; text-align: center; }
-        .input-group { max-width: 500px; margin: 30px auto; }
-        input { 
-            width: 100%; padding: 18px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); 
-            color: white; font-size: 16px; margin-bottom: 15px; transition: 0.3s; text-align: left;
-        }
-        input:focus { border-color: var(--gold); background: rgba(0,0,0,0.5); box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+        /* --- NEWSLETTER & THANK YOU AREA --- */
+        .newsletter { background: var(--primary); padding: 80px 20px; text-align: center; position: relative; }
+        .input-group { max-width: 500px; margin: 30px auto; transition: opacity 0.5s ease; }
         
-        .btn-shine { 
-            width: 100%; padding: 20px; background: var(--gold); color: #2b0404; border: none; 
-            font-weight: bold; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.1s; 
-            margin-top: 10px; position: relative; overflow: hidden;
-        }
-        .btn-shine::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: 0.5s;
-        }
+        input { width: 100%; padding: 18px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 16px; margin-bottom: 15px; }
+        input:focus { border-color: var(--gold); background: rgba(0,0,0,0.5); }
+        
+        .btn-shine { width: 100%; padding: 20px; background: var(--gold); color: #2b0404; border: none; font-weight: bold; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.1s; position: relative; overflow: hidden; }
         .btn-shine:hover { color: #000; box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
-        .btn-shine:hover::after { left: 100%; }
 
-        .whatsapp-float {
-            position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px;
-            background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px;
-            box-shadow: 0px 0px 20px rgba(37, 211, 102, 0.6);
-            z-index: 10000; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; animation: pulse-green 2s infinite;
+        /* Hidden Success Message */
+        #success-message {
+            display: none;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 40px;
+            border: 1px solid var(--gold);
+            background: rgba(0,0,0,0.2);
+            animation: fadeUp 1s ease;
         }
-        .whatsapp-float:hover { transform: scale(1.1); background-color: #128C7E; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes pulse-green {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
+        .success-icon { font-size: 50px; color: var(--gold); margin-bottom: 20px; }
 
-        footer { padding: 50px; text-align: center; color: #888; font-size: 12px; background: var(--bg-royal); }
+        /* WHATSAPP */
+        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 0px 0px 20px rgba(37, 211, 102, 0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+
+        footer { padding: 50px; text-align: center; color: #888; font-size: 12px; background: var(--primary); }
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1.2s; } .reveal.active { opacity: 1; transform: translateY(0); }
+        .gold-divider { height: 2px; width: 0px; background: var(--gold); margin: 20px auto; transition: width 1.5s ease; } .reveal.active .gold-divider { width: 100px; }
 
         @media (max-width: 768px) {
             .hero-logo { width: 200px; }
-            .hero h3 { font-size: 18px; letter-spacing: 5px; }
             .founder-grid, .tech-grid { grid-template-columns: 1fr; }
-            .founder-img { height: auto; max-width: 100%; }
-            #cursor-dot, #cursor-glow { display: none; }
-            * { cursor: auto; }
+            /* Custom cursor media query removed */
         }
     </style>
 </head>
 <body>
 
     <div class="noise-overlay"></div>
-
-    <div id="cursor-dot"></div>
-    <div id="cursor-glow"></div>
-
+    
     <div id="preloader">
         <img src="https://res.cloudinary.com/djjriywno/image/upload/v1768976070/Logo_copy_l4turh.png" class="loader-img" alt="Rudra Logo">
     </div>
@@ -223,9 +151,7 @@
     <section class="hero">
         <div id="particles"></div>
         <div class="hero-content">
-            
             <img src="https://res.cloudinary.com/djjriywno/image/upload/v1768976070/Logo_copy_l4turh.png" class="hero-logo" alt="RUDRA">
-            
             <h3>COMING SOON</h3>
             <div style="display:inline-block; overflow: hidden;">
                 <p class="decode-text" id="decodeText">THE ROYAL HERITAGE • INDIA</p>
@@ -267,7 +193,7 @@
             <div class="tech-card tilt-card">
                 <i class="fas fa-chart-line tech-icon"></i>
                 <h3>The Smart Investment</h3>
-                <p>With gold prices skyrocketing, Rudra offers the perfect alternative. High-quality artificial jewelry that feels real, fits your budget, and has zero hidden charges. Less margin for us, more value for you.</p>
+                <p>With gold prices skyrocketing, Rudra offers the perfect alternative. High-quality artificial jewelry that feels real, fits your budget, and has zero hidden charges.</p>
             </div>
         </div>
     </section>
@@ -291,17 +217,24 @@
         <h2 style="font-family:'Playfair Display'; color:var(--gold); font-size:36px; margin-bottom:20px;">Join The Royal List</h2>
         <p style="color:#ddd; margin-bottom:40px;">Be the first to access the treasury.</p>
         
-        <form action="https://formsubmit.co/dagaradhika29@gmail.com" method="POST" class="input-group">
-            <input type="hidden" name="_subject" value="New RUDRA VIP Customer">
-            <input type="hidden" name="_next" value="https://google.com">
-            <input type="hidden" name="_captcha" value="false">
-            
-            <input type="text" name="name" placeholder="Full Name" required>
-            <input type="tel" name="phone" placeholder="WhatsApp Number" required>
-            <input type="email" name="email" placeholder="Email Address" required>
-            
-            <button type="submit" class="btn-shine" id="magnetic-btn">Join Waitlist</button>
-        </form>
+        <div id="form-container">
+            <form id="newsletter-form" action="https://formsubmit.co/ajax/dagaradhika29@gmail.com" method="POST" class="input-group">
+                <input type="hidden" name="_subject" value="New RUDRA VIP Customer">
+                <input type="hidden" name="_captcha" value="false">
+                
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="tel" name="phone" placeholder="WhatsApp Number" required>
+                <input type="email" name="email" placeholder="Email Address" required>
+                
+                <button type="submit" class="btn-shine" id="magnetic-btn">Join Waitlist</button>
+            </form>
+        </div>
+
+        <div id="success-message">
+            <i class="fas fa-crown success-icon"></i>
+            <h2 style="color:var(--gold); margin-bottom:15px;">Welcome to the Treasury</h2>
+            <p style="color:#eee;">Your request has been secured. You will be the first to know when the gates open.</p>
+        </div>
     </section>
 
     <footer>
@@ -313,35 +246,42 @@
     </footer>
 
     <script>
-        // --- 1. MAGNETIC BUTTON ---
-        const btn = document.getElementById('magnetic-btn');
-        btn.addEventListener('mousemove', (e) => {
-            const position = btn.getBoundingClientRect();
-            const x = e.pageX - position.left - position.width / 2;
-            const y = e.pageY - position.top - position.height / 2;
-            btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
-        });
-        btn.addEventListener('mouseout', () => { btn.style.transform = 'translate(0px, 0px)'; });
+        // --- 1. HANDLE FORM SUBMISSION (AJAX) ---
+        const form = document.getElementById('newsletter-form');
+        const successMsg = document.getElementById('success-message');
+        const formContainer = document.getElementById('form-container');
 
-        // --- 2. MOUSE FOLLOW ---
-        const cursorDot = document.getElementById("cursor-dot");
-        const cursorGlow = document.getElementById("cursor-glow");
-        document.addEventListener("mousemove", (e) => {
-            cursorDot.style.left = e.clientX + "px"; cursorDot.style.top = e.clientY + "px";
-            setTimeout(() => { cursorGlow.style.left = e.clientX + "px"; cursorGlow.style.top = e.clientY + "px"; }, 50);
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop page reload
+            
+            const btn = form.querySelector('button');
+            btn.innerText = "Securing Spot..."; // Loading state
+            
+            const formData = new FormData(form);
+            
+            fetch("https://formsubmit.co/ajax/dagaradhika29@gmail.com", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // HIDE Form, SHOW Success
+                formContainer.style.display = 'none';
+                successMsg.style.display = 'block';
+            })
+            .catch(error => {
+                console.log(error);
+                btn.innerText = "Something went wrong. Try again.";
+            });
         });
+
+        // --- CUSTOM CURSOR JS REMOVED ---
 
         // --- 3. PRELOADER & HERO REVEAL ---
         window.addEventListener('load', function() {
             var preloader = document.getElementById('preloader');
-            
-            // 1. Fade out Preloader
             preloader.style.opacity = '0';
-            
-            // 2. Wait for it to disappear
-            setTimeout(function() { 
-                preloader.style.display = 'none'; 
-            }, 800);
+            setTimeout(function() { preloader.style.display = 'none'; }, 800);
         });
 
         // --- 4. SCROLL ANIMATION ---
@@ -363,33 +303,28 @@
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 const rotateX = ((y - centerY) / centerY) * -10; 
                 const rotateY = ((x - centerX) / centerX) * 10;
-
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
             });
-
             card.addEventListener('mouseleave', () => {
                 card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`; 
             });
         });
 
-        // --- 6. GOLD PARTICLES ---
+        // --- 6. PARTICLES ---
         function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = 40; 
-            for (let i = 0; i < particleCount; i++) {
+            for (let i = 0; i < 40; i++) {
                 let p = document.createElement('div');
                 p.classList.add('particle');
                 let size = Math.random() * 3 + 1;
                 p.style.width = size + 'px'; p.style.height = size + 'px';
                 p.style.left = Math.random() * 100 + 'vw';
-                let duration = Math.random() * 5 + 3;
-                p.style.animationDuration = duration + 's';
-                p.style.animationDelay = Math.random() * 5 + 's';
+                p.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                p.style.animationDelay = (Math.random() * 5) + 's';
                 container.appendChild(p);
             }
         }
