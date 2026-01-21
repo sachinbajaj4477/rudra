@@ -10,35 +10,73 @@
     <style>
         /* --- LUXURY VARIABLES --- */
         :root {
-            --primary: #2b0404; /* UPDATED: Deep Royal Maroon */
+            --primary: #2b0404; /* Deep Royal Maroon */
             --gold: #d4af37;
+            /* Shimmering Gold Gradient */
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             --text: #ffffff;
             --bg-dark: #050505;
         }
 
-        /* Removed 'cursor: none' so the normal arrow shows */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Lato', sans-serif;
-            background-color: var(--primary); /* Global Background */
+            background-color: var(--primary);
             color: var(--text);
             overflow-x: hidden;
         }
 
         h1, h2, h3, h4, h5 { font-family: 'Playfair Display', serif; letter-spacing: 1px; }
 
-        /* NOISE OVERLAY */
-        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.05; pointer-events: none; z-index: 9990; }
-        
-        /* --- CUSTOM CURSOR CSS REMOVED HERE --- */
+        /* --- 0. PROGRESS BAR --- */
+        #progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: transparent; z-index: 10002;
+        }
+        #progress-bar {
+            height: 100%; background: var(--gold-gradient); width: 0%; transition: width 0.1s;
+            box-shadow: 0 0 10px var(--gold);
+        }
 
-        /* PRELOADER */
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 10001; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
+        /* --- 1. NOISE OVERLAY --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.06; pointer-events: none; z-index: 9990;
+        }
+
+        /* --- 2. PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10001;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
         .loader-img { width: 150px; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.3; transform: scale(0.95); } }
 
-        /* HERO SECTION */
+        /* --- 3. GOLD TEXT & ANIMATIONS --- */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .gold-divider { 
+            height: 2px; width: 0px; background: var(--gold); margin: 20px auto; 
+            transition: width 1.5s ease; 
+        }
+        .reveal.active .gold-divider { width: 100px; }
+
+        /* --- HERO SECTION --- */
         .hero {
             height: 100vh;
             background: var(--primary);
@@ -51,97 +89,164 @@
         .particle { position: absolute; background: var(--gold); border-radius: 50%; opacity: 0; box-shadow: 0 0 10px var(--gold); animation: floatUp linear infinite; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
 
-        .hero-content { z-index: 2; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .hero-content { 
+            z-index: 2; 
+            position: relative; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px;
+        }
 
-        /* LOGO ANIMATION: INSIDE TO OUT */
+        /* LOGO ANIMATION - Reduced Bottom Margin */
         .hero-logo {
-            width: 280px; max-width: 70%; height: auto;
+            width: 280px; max-width: 60%; height: auto;
             opacity: 0; transform: scale(0.5); 
-            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.4));
-            margin-bottom: 0px;
-            animation: zoomLogo 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-            animation-delay: 0.5s;
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
+            
+            /* REDUCED GAP HERE */
+            margin-bottom: 0px; 
+            
+            animation: zoomLogo 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards, floatLogo 6s ease-in-out infinite 2s;
+            animation-delay: 0.5s, 2.5s; 
         }
         @keyframes zoomLogo { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .hero h3 { font-size: 24px; color: white; letter-spacing: 8px; margin-top: 25px; opacity: 0; animation: fadeIn 2s ease 1.5s forwards; }
+        /* COMING SOON - FANCY FONT & BIGGER */
+        .hero h3 { 
+            /* Font Update */
+            font-family: 'Playfair Display', serif; 
+            font-style: italic; 
+            font-size: 38px; /* Bigger Size */
+            letter-spacing: 5px; 
+            
+            /* Tighter Spacing */
+            margin-top: 5px; 
+            margin-bottom: 5px;
+            
+            text-align: center;
+            
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite, fadeIn 2s ease 1.5s forwards;
+            
+            opacity: 0; 
+        }
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* TEXT REVEAL: LEFT TO RIGHT */
+        /* TAGLINE - Tighter Spacing */
         .decode-text {
-            font-size: 16px; font-style: italic; margin-top: 20px; color: #aaa; letter-spacing: 3px;
-            min-height: 24px; white-space: nowrap;
+            font-size: 14px; 
+            font-weight: 300;
+            margin-top: 5px; /* Closer to title */
+            color: #aaa; 
+            letter-spacing: 4px;
+            min-height: 24px; 
+            white-space: nowrap;
+            text-align: center;
+            
             clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-20px);
             animation: revealLeftRight 2.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             animation-delay: 1.2s;
         }
-        @keyframes revealLeftRight { 0% { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(-20px); } 100% { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); } }
+        @keyframes revealLeftRight { 0% { clip-path: inset(0 100% 0 0); opacity: 0; transform: translateX(0); } 100% { clip-path: inset(0 0 0 0); opacity: 1; transform: translateX(0); } }
 
-        /* SECTIONS */
-        .section { padding: 100px 10%; background: var(--primary); border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+        /* --- SECTIONS --- */
+        .section { padding: 100px 10%; background: var(--primary); border-bottom: 1px solid rgba(212, 175, 55, 0.1); position: relative; }
         .section-header { text-align: center; margin-bottom: 60px; }
-        .section-title { font-size: 40px; color: var(--gold); margin-bottom: 15px; }
+        .section-title { font-size: 40px; margin-bottom: 15px; } 
         
+        /* FOUNDER (PARALLAX) */
         .founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .founder-img-box { text-align: center; perspective: 1000px; }
-        .founder-img { width: 100%; max-width: 450px; height: 550px; object-fit: cover; border-radius: 4px; border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); opacity: 0.95; transition: all 0.6s ease; }
-        .founder-img:hover { transform: scale(1.02) rotateY(5deg); }
+        .founder-img-box { text-align: center; perspective: 1000px; overflow: hidden; border-radius: 4px; }
+        .founder-img { 
+            width: 100%; max-width: 450px; height: 550px; 
+            object-fit: cover; object-position: top; 
+            border: 2px solid var(--gold); 
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2); 
+            opacity: 0.95; transition: transform 0.1s linear;
+        }
+        
         .founder-info h2 { font-size: 45px; color: white; margin-bottom: 5px; }
         .founder-info h4 { color: var(--gold); letter-spacing: 3px; font-size: 14px; margin-bottom: 20px; text-transform: uppercase; }
         .founder-title { color: var(--gold); font-size: 16px; letter-spacing: 2px; margin-bottom: 25px; font-weight: bold; display: inline-block; border-bottom: 1px solid var(--gold); padding-bottom: 5px; }
         .founder-info p { font-size: 16px; color: #ccc; line-height: 1.8; margin-bottom: 20px; }
 
+        /* TECH CARDS */
         .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; perspective: 1000px; }
-        .tech-card { background: linear-gradient(145deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5)); padding: 40px; border: 1px solid rgba(212, 175, 55, 0.2); transition: transform 0.1s ease; }
-        .tech-card:hover { border-color: var(--gold); }
+        .tech-card { 
+            background: linear-gradient(145deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5)); padding: 40px; 
+            border: 1px solid rgba(212, 175, 55, 0.2); transition: all 0.4s ease; 
+            position: relative; overflow: hidden;
+        }
+        .tech-card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
         .tech-card h3 { color: white; margin-bottom: 15px; font-size: 22px; }
         .tech-card p { color: #ccc; font-size: 15px; line-height: 1.6; }
-        .tech-icon { font-size: 30px; color: var(--gold); margin-bottom: 20px; }
+        .tech-icon { font-size: 30px; color: var(--gold); margin-bottom: 20px; display: inline-block; }
+        .tech-card:hover .tech-icon { animation: bounce 0.6s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-5px); } }
 
-        /* --- NEWSLETTER & THANK YOU AREA --- */
+        /* --- NEWSLETTER --- */
         .newsletter { background: var(--primary); padding: 80px 20px; text-align: center; position: relative; }
-        .input-group { max-width: 500px; margin: 30px auto; transition: opacity 0.5s ease; }
+        .input-group { max-width: 500px; margin: 30px auto; transition: opacity 0.5s ease; position: relative; }
         
-        input { width: 100%; padding: 18px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 16px; margin-bottom: 15px; }
-        input:focus { border-color: var(--gold); background: rgba(0,0,0,0.5); }
+        .input-box { position: relative; margin-bottom: 20px; }
+        input { 
+            width: 100%; padding: 18px; background: rgba(0,0,0,0.2); border: none; border-bottom: 1px solid rgba(255,255,255,0.2); 
+            color: white; font-size: 16px; transition: 0.3s; text-align: left;
+        }
+        input:focus { outline: none; background: rgba(0,0,0,0.4); }
+        .input-line { position: absolute; bottom: 0; left: 0; width: 0%; height: 2px; background: var(--gold); transition: width 0.4s ease; }
+        input:focus + .input-line { width: 100%; }
         
-        .btn-shine { width: 100%; padding: 20px; background: var(--gold); color: #2b0404; border: none; font-weight: bold; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.1s; position: relative; overflow: hidden; }
-        .btn-shine:hover { color: #000; box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
+        .btn-shine { 
+            width: 100%; padding: 20px; background: var(--gold); color: #2b0404; border: none; 
+            font-weight: bold; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: 0.3s; 
+            margin-top: 10px; position: relative; overflow: hidden;
+        }
+        .btn-shine:hover { color: #fff; box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); transform: scale(1.02); }
 
-        /* Hidden Success Message */
         #success-message {
-            display: none;
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 40px;
-            border: 1px solid var(--gold);
-            background: rgba(0,0,0,0.2);
-            animation: fadeUp 1s ease;
+            display: none; max-width: 600px; margin: 30px auto; padding: 40px;
+            border: 1px solid var(--gold); background: rgba(0,0,0,0.2); animation: fadeUp 1s ease;
         }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
         .success-icon { font-size: 50px; color: var(--gold); margin-bottom: 20px; }
 
-        /* WHATSAPP */
-        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 0px 0px 20px rgba(37, 211, 102, 0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 0px 0px 20px rgba(37, 211, 102, 0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; transition: all 0.3s; animation: pulse-green 2s infinite; }
+        .whatsapp-float:hover { transform: scale(1.1); background-color: #128C7E; }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
         footer { padding: 50px; text-align: center; color: #888; font-size: 12px; background: var(--primary); }
-        .reveal { opacity: 0; transform: translateY(50px); transition: all 1.2s; } .reveal.active { opacity: 1; transform: translateY(0); }
-        .gold-divider { height: 2px; width: 0px; background: var(--gold); margin: 20px auto; transition: width 1.5s ease; } .reveal.active .gold-divider { width: 100px; }
 
+        /* --- RESPONSIVE ADJUSTMENTS --- */
         @media (max-width: 768px) {
-            .hero-logo { width: 200px; }
-            .founder-grid, .tech-grid { grid-template-columns: 1fr; }
-            /* Custom cursor media query removed */
+            .hero-logo { width: 200px; margin-bottom: 5px; } /* Smaller Logo */
+            .hero h3 { font-size: 28px; letter-spacing: 3px; margin-top: 5px; } /* Smaller Title */
+            .decode-text { font-size: 12px; letter-spacing: 3px; margin-top: 5px; } /* Smaller Tagline */
+            
+            .section { padding: 80px 20px; }
+            .founder-grid, .tech-grid { grid-template-columns: 1fr; gap: 40px; }
+            .founder-img { height: auto; max-width: 100%; border-width: 1px; }
+            .founder-info h2 { font-size: 35px; }
+            
+            .input-group { width: 100%; }
         }
     </style>
 </head>
 <body>
 
+    <div id="progress-container"><div id="progress-bar"></div></div>
+
     <div class="noise-overlay"></div>
-    
+
     <div id="preloader">
-        <img src="https://res.cloudinary.com/djjriywno/image/upload/v1768976070/Logo_copy_l4turh.png" class="loader-img" alt="Rudra Logo">
+        <img src="https://res.cloudinary.com/djjriywno/image/upload/v1769005689/Logo_copy_l4turh.png" class="loader-img" alt="Rudra Logo">
     </div>
 
     <a href="https://wa.me/918955356918" class="whatsapp-float" target="_blank">
@@ -151,8 +256,10 @@
     <section class="hero">
         <div id="particles"></div>
         <div class="hero-content">
-            <img src="https://res.cloudinary.com/djjriywno/image/upload/v1768976070/Logo_copy_l4turh.png" class="hero-logo" alt="RUDRA">
+            <img src="https://res.cloudinary.com/djjriywno/image/upload/v1769005689/Logo_copy_l4turh.png" class="hero-logo" alt="RUDRA">
+            
             <h3>COMING SOON</h3>
+            
             <div style="display:inline-block; overflow: hidden;">
                 <p class="decode-text" id="decodeText">THE ROYAL HERITAGE • INDIA</p>
             </div>
@@ -161,7 +268,7 @@
 
     <section class="section">
         <div class="section-header reveal">
-            <h2 class="section-title">The Digital Legacy</h2>
+            <h2 class="section-title gold-text">The Digital Legacy</h2>
             <div class="gold-divider"></div>
         </div>
         <div class="tech-grid reveal">
@@ -180,7 +287,7 @@
 
     <section class="section">
         <div class="section-header reveal">
-            <h2 class="section-title">Why Choose Rudra?</h2>
+            <h2 class="section-title gold-text">Why Choose Rudra?</h2>
             <p style="color:#aaa">Quality vs Budget? We chose both.</p>
             <div class="gold-divider"></div>
         </div>
@@ -193,7 +300,7 @@
             <div class="tech-card tilt-card">
                 <i class="fas fa-chart-line tech-icon"></i>
                 <h3>The Smart Investment</h3>
-                <p>With gold prices skyrocketing, Rudra offers the perfect alternative. High-quality artificial jewelry that feels real, fits your budget, and has zero hidden charges.</p>
+                <p>With gold prices skyrocketing, Rudra offers the perfect alternative. High-quality artificial jewelry that feels real, fits your budget, and has zero hidden charges. Less margin for us, more value for you.</p>
             </div>
         </div>
     </section>
@@ -201,11 +308,11 @@
     <section class="section">
         <div class="founder-grid">
             <div class="founder-img-box reveal">
-                <img src="https://res.cloudinary.com/djjriywno/image/upload/v1768764046/WhatsApp_Image_2026-01-19_at_00.49.48_jsoqvl.jpg" class="founder-img" alt="Radhika Daga - Founder">
+                <img src="https://res.cloudinary.com/djjriywno/image/upload/v1768764046/WhatsApp_Image_2026-01-19_at_00.49.48_jsoqvl.jpg" class="founder-img" id="founder-photo" alt="Radhika Daga - Founder">
             </div>
             <div class="founder-info reveal">
                 <h4>MEET THE VISIONARY</h4>
-                <h2>Radhika Daga</h2>
+                <h2 class="gold-text">Radhika Daga</h2>
                 <div class="founder-title">CEO & Founder</div>
                 <p>Growing up in her father's factory, Radhika saw a gap in the market: Women wanted the luxury of gold but without the fear of theft or the burden of cost. She realized that the future is not in showrooms, but in screens.</p>
                 <p><strong>"I don't want to step out to run a shop. I want to bring the shop to your phone."</strong> - Radhika founded Rudra to bring her father's manufacturing excellence directly to you.</p>
@@ -214,7 +321,7 @@
     </section>
 
     <section class="newsletter reveal">
-        <h2 style="font-family:'Playfair Display'; color:var(--gold); font-size:36px; margin-bottom:20px;">Join The Royal List</h2>
+        <h2 class="gold-text" style="font-family:'Playfair Display'; font-size:36px; margin-bottom:20px;">Join The Royal List</h2>
         <p style="color:#ddd; margin-bottom:40px;">Be the first to access the treasury.</p>
         
         <div id="form-container">
@@ -222,9 +329,18 @@
                 <input type="hidden" name="_subject" value="New RUDRA VIP Customer">
                 <input type="hidden" name="_captcha" value="false">
                 
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="tel" name="phone" placeholder="WhatsApp Number" required>
-                <input type="email" name="email" placeholder="Email Address" required>
+                <div class="input-box">
+                    <input type="text" name="name" placeholder="Full Name" required>
+                    <div class="input-line"></div>
+                </div>
+                <div class="input-box">
+                    <input type="tel" name="phone" placeholder="WhatsApp Number" required>
+                    <div class="input-line"></div>
+                </div>
+                <div class="input-box">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <div class="input-line"></div>
+                </div>
                 
                 <button type="submit" class="btn-shine" id="magnetic-btn">Join Waitlist</button>
             </form>
@@ -246,16 +362,32 @@
     </footer>
 
     <script>
-        // --- 1. HANDLE FORM SUBMISSION (AJAX) ---
+        // --- 1. PROGRESS BAR & PARALLAX ---
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+            
+            reveal(); // Trigger reveals
+            
+            // Founder Parallax (Desktop Only)
+            const founderPhoto = document.getElementById('founder-photo');
+            if(window.innerWidth > 768) { 
+                let rate = winScroll * 0.05;
+                founderPhoto.style.transform = `translateY(${rate}px)`;
+            }
+        };
+
+        // --- 2. HANDLE FORM SUBMISSION (AJAX) ---
         const form = document.getElementById('newsletter-form');
         const successMsg = document.getElementById('success-message');
         const formContainer = document.getElementById('form-container');
 
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Stop page reload
-            
+            e.preventDefault(); 
             const btn = form.querySelector('button');
-            btn.innerText = "Securing Spot..."; // Loading state
+            btn.innerText = "Securing Spot..."; 
             
             const formData = new FormData(form);
             
@@ -265,7 +397,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                // HIDE Form, SHOW Success
                 formContainer.style.display = 'none';
                 successMsg.style.display = 'block';
             })
@@ -275,9 +406,7 @@
             });
         });
 
-        // --- CUSTOM CURSOR JS REMOVED ---
-
-        // --- 3. PRELOADER & HERO REVEAL ---
+        // --- 3. PRELOADER ---
         window.addEventListener('load', function() {
             var preloader = document.getElementById('preloader');
             preloader.style.opacity = '0';
@@ -285,7 +414,6 @@
         });
 
         // --- 4. SCROLL ANIMATION ---
-        window.addEventListener('scroll', reveal);
         function reveal() {
             var reveals = document.querySelectorAll('.reveal');
             for (var i = 0; i < reveals.length; i++) {
@@ -294,7 +422,6 @@
                 if (revealtop < windowheight - 100) { reveals[i].classList.add('active'); }
             }
         }
-        reveal();
 
         // --- 5. 3D TILT EFFECT ---
         const cards = document.querySelectorAll('.tilt-card');
