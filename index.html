@@ -103,17 +103,59 @@
             padding: 20px;
         }
 
-        /* LOGO ANIMATION - Reduced Bottom Margin */
-        .hero-logo {
-            width: 280px; max-width: 60%; height: auto;
-            opacity: 0; transform: scale(0.5); 
-            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
-            margin-bottom: 0px; 
-            animation: zoomLogo 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards, floatLogo 6s ease-in-out infinite 2s;
-            animation-delay: 0.5s, 2.5s; 
+        /* --- LOGO CONTAINER --- */
+        .logo-wrapper {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0px;
         }
+
+        /* 1. VIDEO STYLE (Initial) */
+        #intro-video {
+            width: 100%; height: 100%;
+            object-fit: cover; 
+            border-radius: 50%; /* Perfect Circle */
+            
+            /* Magic Masking & Blend */
+            background-color: black;
+            mix-blend-mode: screen;
+            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
+            mask-image: radial-gradient(circle, black 40%, transparent 70%);
+
+            transition: opacity 1s ease; /* Fade out effect */
+            opacity: 0; 
+            transform: scale(0.5); 
+            animation: zoomLogo 2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* 2. PNG LOGO STYLE (Hidden Initially) */
+        #static-logo {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: auto;
+            object-fit: contain;
+            display: none; /* Hidden at start */
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.5));
+            opacity: 0;
+        }
+
+        /* Animation for PNG appearing (Zoom Out to In) */
+        .reveal-logo-anim {
+            display: block !important;
+            animation: popInLogo 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
         @keyframes zoomLogo { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        @keyframes popInLogo {
+            0% { opacity: 0; transform: scale(0.5); } /* Start Small */
+            100% { opacity: 1; transform: scale(1); }  /* End Normal */
+        }
 
         /* COMING SOON - FANCY FONT & BIGGER */
         .hero h3 { 
@@ -219,7 +261,8 @@
 
         /* --- RESPONSIVE ADJUSTMENTS --- */
         @media (max-width: 768px) {
-            .hero-logo { width: 200px; margin-bottom: 5px; } /* Smaller Logo */
+            .logo-wrapper { width: 250px; height: 250px; } /* Mobile Size */
+            
             .hero h3 { font-size: 28px; letter-spacing: 3px; margin-top: 5px; } /* Smaller Title */
             .decode-text { font-size: 12px; letter-spacing: 3px; margin-top: 5px; } /* Smaller Tagline */
             
@@ -249,7 +292,14 @@
     <section class="hero">
         <div id="particles"></div>
         <div class="hero-content">
-            <img src="https://res.cloudinary.com/djjriywno/image/upload/v1769005689/Logo_copy_l4turh.png" class="hero-logo" alt="RUDRA">
+            
+            <div class="logo-wrapper">
+                <video id="intro-video" autoplay muted playsinline preload="auto">
+                    <source src="https://res.cloudinary.com/djjriywno/video/upload/v1769083152/Rudra_ogarzr.mp4" type="video/mp4">
+                </video>
+
+                <img src="https://res.cloudinary.com/djjriywno/image/upload/v1769005689/Logo_copy_l4turh.png" id="static-logo" alt="Rudra Logo">
+            </div>
             
             <h3>COMING SOON</h3>
             
@@ -355,6 +405,24 @@
     </footer>
 
     <script>
+        // --- 0. LOGO REVEAL LOGIC (VIDEO ENDS -> PNG SHOWS) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('intro-video');
+            const staticLogo = document.getElementById('static-logo');
+
+            // When video finishes playing
+            video.onended = function() {
+                // 1. Fade out video
+                video.style.opacity = '0';
+                
+                // 2. Wait a split second, then remove video & show PNG
+                setTimeout(() => {
+                    video.style.display = 'none';
+                    staticLogo.classList.add('reveal-logo-anim'); // This class triggers the Zoom In animation
+                }, 500); // 500ms delay matches transition
+            };
+        });
+
         // --- 1. PROGRESS BAR & PARALLAX ---
         window.onscroll = function() {
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -384,7 +452,7 @@
             
             const formData = new FormData(form);
             
-            // UPDATED: Secure Fetch URL
+            // SECURE FETCH URL
             fetch("https://formsubmit.co/ajax/39b529ca2c3ff78dea576e6806d61eb3", {
                 method: "POST",
                 body: formData
